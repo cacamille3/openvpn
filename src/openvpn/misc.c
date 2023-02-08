@@ -5,9 +5,9 @@
  *             packet encryption, packet authentication, and
  *             packet compression.
  *
- *  Copyright (C) 2002-2021 OpenVPN Inc <sales@openvpn.net>
+ *  Copyright (C) 2002-2022 OpenVPN Inc <sales@openvpn.net>
  *  Copyright (C) 2014-2015 David Sommerseth <davids@redhat.com>
- *  Copyright (C) 2016-2021 David Sommerseth <davids@openvpn.net>
+ *  Copyright (C) 2016-2022 David Sommerseth <davids@openvpn.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License version 2
@@ -273,6 +273,7 @@ get_user_pass_cr(struct user_pass *up,
                 msg(D_LOW, "No password found in %s authfile '%s'. Querying the management interface", prefix, auth_file);
                 if (!auth_user_pass_mgmt(up, prefix, flags, auth_challenge))
                 {
+                    fclose(fp);
                     return false;
                 }
             }
@@ -519,19 +520,13 @@ set_auth_token(struct user_pass *up, struct user_pass *tk, const char *token)
          * --auth-token has no username, so it needs the username
          * either already set or copied from up, or later set by
          * --auth-token-user
-         *
-         * Do not overwrite the username if already set to avoid
-         * overwriting an username set by --auth-token-user
+         * If already set, tk is fully defined.
          */
-        if (up->defined && !tk->defined)
+        if (strlen(tk->username))
         {
-            strncpynt(tk->username, up->username, USER_PASS_LEN);
             tk->defined = true;
         }
     }
-
-    /* Cleans user/pass for nocache */
-    purge_user_pass(up, false);
 }
 
 void

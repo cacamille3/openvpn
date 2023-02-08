@@ -5,9 +5,9 @@
  *             packet encryption, packet authentication, and
  *             packet compression.
  *
- *  Copyright (C) 2002-2021 OpenVPN Inc <sales@openvpn.net>
+ *  Copyright (C) 2002-2022 OpenVPN Inc <sales@openvpn.net>
  *  Copyright (C) 2010-2021 Fox Crypto B.V. <openvpn@foxcrypto.com>
- *  Copyright (C) 2008-2021 David Sommerseth <dazo@eurephia.org>
+ *  Copyright (C) 2008-2022 David Sommerseth <dazo@eurephia.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License version 2
@@ -108,7 +108,18 @@ mutate_ncp_cipher_list(const char *list, struct gc_arena *gc)
          * (and translate_cipher_name_from_openvpn/
          * translate_cipher_name_to_openvpn) also normalises the cipher name,
          * e.g. replacing AeS-128-gCm with AES-128-GCM
+         *
+         * ciphers that have ? in front of them are considered optional and
+         * OpenVPN will only warn if they are not found (and remove them from
+         * the list)
          */
+
+        bool optional = false;
+        if (token[0] == '?')
+        {
+            token++;
+            optional = true;
+        }
         const cipher_kt_t *ktc = cipher_kt_get(token);
         if (strcmp(token, "none") == 0)
         {
@@ -120,8 +131,9 @@ mutate_ncp_cipher_list(const char *list, struct gc_arena *gc)
         }
         if (!ktc && strcmp(token, "none") != 0)
         {
-            msg(M_WARN, "Unsupported cipher in --data-ciphers: %s", token);
-            error_found = true;
+            const char* optstr = optional ? "optional ": "";
+            msg(M_WARN, "Unsupported %scipher in --data-ciphers: %s", optstr, token);
+            error_found = error_found || !optional;
         }
         else
         {

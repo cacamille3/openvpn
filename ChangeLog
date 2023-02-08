@@ -1,5 +1,171 @@
 OpenVPN Change Log
-Copyright (C) 2002-2021 OpenVPN Inc <sales@openvpn.net>
+Copyright (C) 2002-2022 OpenVPN Inc <sales@openvpn.net>
+
+2022.10.27 -- Version 2.5.8
+
+Antonio Quartulli (1):
+      tls-crypt-v2: bail out if the client key is too small
+
+Arne Schwabe (4):
+      Remove useless empty line from CR_RESPONSE message
+      Allow running a default configuration with TLS libraries without BF-CBC
+      Change command help to match man page and implementation
+      Fix OpenVPN querying user/password if auth-token with user expires
+
+Frank Lichtenheld (2):
+      t_client: Allow to force FAIL on prerequisite fails
+      t_client.sh: do not require fping6
+
+Gert Doering (1):
+      Preparing release 2.5.8
+
+Lev Stipakov (1):
+      msvc: add branch name and commit hash to version output
+
+Martin Jan≈Ø (1):
+      Update the replay-window backtrack log message
+
+Selva Nair (5):
+      Do not skip ERROR:/SUCCESS: response from management interface
+      Fix auth-token usage with management-def-auth
+      Allow a few levels of recursion in virtual_output_callback()
+      Ensure --auth-nocache is handled during renegotiation
+      Purge auth-token as well while purging passwords
+      Do not copy auth_token username to itself
+
+
+2022.05.24 -- Version 2.5.7
+
+Antonio Quartulli (4):
+      networking: use OPENVPN_ETH_ALEN instead of ETH_ALEN
+      networking_iproute2: don't pass M_WARN to openvpn_execve_check()
+      t_net.sh: delete dummy iface using iproute command
+      auth-pam.c: add missing include limits.h
+
+Arne Schwabe (11):
+      Add insecure tls-cert-profile options
+      Refactor early initialisation and uninitialisation into methods
+      Allow loading of non default providers
+      Add ubuntu 22.04 to Github Actions
+      Add macos OpenSSL 3.0 and ASAN builds
+      Add --with-openssl-engine autoconf option (auto|yes|no)
+      Fix allowing/showing unsupported ciphers and digests
+      Remove dependency on BF-CBC existance from test_ncp
+      Add message when decoding PKCS12 file fails.
+      Translate OpenSSL 3.0 digest names to OpenSSL 1.1 digest names
+      Fix client-pending-auth error message to say ERROR instead of SUCCESS
+
+Gert Doering (1):
+      Preparing release 2.5.7
+
+Jan Mikkelsen (1):
+      cipher-negotiation.rst missing from doc/Makefile.am
+
+Lev Stipakov (5):
+      vcpkg-ports\pkcs11-helper: shorten patch filename
+      msvc: adjust build options to harden binaries
+      vcpkg-ports: remove openssl port
+      vcpkg: switch to manifest
+      Fix M_ERRNO behavior on Windows
+
+Marc Becker (1):
+      vcpkg-ports/pkcs11-helper: bump to release 1.29
+
+Simon Rozman (1):
+      tapctl: Resolve MSVC C4996 warnings
+
+
+2022.03.16 -- Version 2.5.6
+
+Antonio Quartulli (4):
+      GitHub Actions: update script to same version as master
+      update copyright year to 2022
+      keyingmaterialexporter.c: include strings.h
+      remove unused sitnl.h file
+
+David Sommerseth (2):
+      sample-plugin: New plugin for testing multiple auth plugins
+      plug-ins: Disallow multiple deferred authentication plug-ins
+
+Frank Lichtenheld (2):
+      doc/Makefile: rebuild rst docs if input files change
+      doc/options: clean up documentation for --proto and related options
+
+Gert Doering (4):
+      fix Changes.rst errors in 2.5.3 and 2.5.5 announcement
+      Repair --inactive with 'bytes' argument larger 2Gbytes.
+      Fix --mtu-disc maybe|yes on Linux.
+      Preparing release 2.5.6
+
+Ilya Shipitsin (1):
+      CI: github actions: keep "pdb" in artifacts
+
+Lev Stipakov (7):
+      auth_token.c: add NULL initialization
+      vcpkg-ports/pkcs11-helper: bump to release 1.28
+      vcpkg-ports/pkcs11-helper: indicate OpenSSL EC support
+      msvc: cleanup
+      vcpkg: link lzo statically
+      vcpkg-ports/pkcs11-helper: adapt to new upstream URL
+      vcpkg-ports: add openssl 1.1.1n
+
+
+2021.12.14 -- Version 2.5.5
+
+Adrian (1):
+      Fix error in example firewall.sh script
+
+Antonio Quartulli (1):
+      configure: remove useless -Wno-* from default CFLAGS
+
+Arne Schwabe (2):
+      Add argv_insert_head__empty_argv__head_only to argv tests
+      Move deprecation of SWEET32/64bit block size ciphers to 2.7
+
+Gert Doering (3):
+      Include --push-remove in the output of --help.
+      Move '--push-peer-info' documentation from 'server' to 'client options'
+      add test case(s) to notice 'openvpn --show-cipher' crashing
+
+Ilya Shipitsin (1):
+      BUILD: enable CFG and Spectre mitigation for MSVC
+
+Lev Stipakov (12):
+      Fix loading PKCS12 files on Windows
+      msvc: fix product version display
+      msvc: add missing header to project file
+      config-msvc.h: fix OpenSSL-related defines
+      contrib/vcpkg-ports: remove openssl port
+      GitHub Actions: use latest working lukka/run-vcpkg
+      Use network address for emulated DHCP server as a default
+      Load OpenSSL config on Windows from trusted location
+      ring_buffer.h: fix GCC warning about unused function
+      ssh_openssl.h: remove unused declaration
+      vcpkg/pkcs11-helper: compatibility with latest vcpkg
+      config-msvc.h: indicate key material export support
+
+Max Fillinger (2):
+      Don't use BF-CBC in unit tests if we don't have it
+      Define have_blowfish variable in ncp unit tests
+
+Richard T Bonhomme (1):
+      doc link-options.rst: Use free open-source dynamic-DNS provider URL
+
+Selva Nair (3):
+      Fix some more wrong defines in config-msvc.h
+      Ensure the current common_name is in the environment for scripts
+      Require EC key support in Windows builds
+
+Sergio E. Nemirowski (1):
+      resolvconf fails with -p
+
+Todd Zullinger (2):
+      Update IRC information in CONTRIBUTING.rst
+      doc/man (vpn-network-options): fix foreign_option_{n} typo
+
+Ville Skytt‰ (1):
+      README.down-root: Fix plugin module name
+
 
 2021.10.04 -- Version 2.5.4
 

@@ -113,6 +113,8 @@
 #define HAVE_EC_GROUP_ORDER_BITS 1
 #define HAVE_EVP_CIPHER_CTX_RESET 1
 
+#define HAVE_EXPORT_KEYING_MATERIAL 1
+
 #define HAVE_DIINSTALLDEVICE 1
 
 #define PATH_SEPARATOR     '\\'
@@ -175,3 +177,5 @@ typedef uint16_t in_port_t;
     #define HAVE_INET_NTOP
     #define HAVE_INET_PTON
 #endif
+
+#define HAVE_CONFIG_VERSION_H 1

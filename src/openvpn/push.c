@@ -5,7 +5,7 @@
  *             packet encryption, packet authentication, and
  *             packet compression.
  *
- *  Copyright (C) 2002-2021 OpenVPN Inc <sales@openvpn.net>
+ *  Copyright (C) 2002-2022 OpenVPN Inc <sales@openvpn.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License version 2
@@ -224,7 +224,6 @@ receive_cr_response(struct context *c, const struct buffer *buffer)
     struct man_def_auth_context *mda = session->opt->mda_context;
     struct env_set *es = session->opt->es;
     int key_id = session->key[KS_PRIMARY].key_id;
-
 
     management_notify_client_cr_response(key_id, mda, es, m);
 #endif
@@ -537,7 +536,7 @@ send_push_reply_auth_token(struct tls_multi *multi)
 
     /* Construct a mimimal control channel push reply message */
     struct buffer buf = alloc_buf_gc(PUSH_BUNDLE_SIZE, &gc);
-    buf_printf(&buf, "%s, %s", push_reply_cmd, e->option);
+    buf_printf(&buf, "%s,%s", push_reply_cmd, e->option);
     send_control_channel_string_dowork(multi, BSTR(&buf), D_PUSH);
     gc_free(&gc);
 }
@@ -780,8 +779,10 @@ push_update_digest(md_ctx_t *ctx, struct buffer *buf, const struct options *opt)
     char line[OPTION_PARM_SIZE];
     while (buf_parse(buf, ',', line, sizeof(line)))
     {
-        /* peer-id might change on restart and this should not trigger reopening tun */
-        if (strprefix(line, "peer-id "))
+        /* peer-id and auth-token might change on restart and this should not trigger reopening tun */
+        if (strprefix(line, "peer-id ")
+            || strprefix(line, "auth-token ")
+            || strprefix(line, "auth-token-user "))
         {
             continue;
         }
@@ -892,13 +893,13 @@ remove_iroutes_from_push_route_list(struct options *o)
         /* cycle through the push list */
         while (e)
         {
-            char *p[MAX_PARMS];
+            char *p[MAX_PARMS+1];
             bool enable = true;
 
             /* parse the push item */
             CLEAR(p);
             if (e->enable
-                && parse_line(e->option, p, SIZE(p), "[PUSH_ROUTE_REMOVE]", 1, D_ROUTE_DEBUG, &gc))
+                && parse_line(e->option, p, SIZE(p)-1, "[PUSH_ROUTE_REMOVE]", 1, D_ROUTE_DEBUG, &gc))
             {
                 /* is the push item a route directive? */
                 if (p[0] && !strcmp(p[0], "route") && !p[3])
