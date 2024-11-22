@@ -335,11 +335,15 @@ dco_check_startup_option(int msglevel, const struct options *o)
     }
 
 #if defined(_WIN32)
+#if defined(ENABLE_DCO_ON_WIN32_VPN_SERVER)
+    msg(msglevel, "--mode server is set but Data Channel Offload is enabled for LOYTEC");
+#else
     if (o->mode == MODE_SERVER)
     {
         msg(msglevel, "--mode server is set. Disabling Data Channel Offload");
         return false;
     }
+#endif
 
     if ((o->windows_driver == WINDOWS_DRIVER_WINTUN)
         || (o->windows_driver == WINDOWS_DRIVER_TAP_WINDOWS6))
