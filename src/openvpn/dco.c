@@ -264,11 +264,15 @@ dco_check_option_ce(const struct connection_entry *ce, int msglevel)
 #endif
 
 #if defined(_WIN32)
+#if defined(ENABLE_DCO_ON_WIN32_VPN_SERVER)
+    msg(msglevel, "NOTE: --remote is not defined but data channel offload is enabled for LOYTEC.");
+#else
     if (!ce->remote)
     {
         msg(msglevel, "NOTE: --remote is not defined, disabling data channel offload.");
         return false;
     }
+#endif
 #endif
 
     return true;
