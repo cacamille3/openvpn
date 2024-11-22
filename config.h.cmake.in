@@ -17,6 +17,9 @@
 /* Enable shared data channel offload */
 #cmakedefine ENABLE_DCO
 
+/* Enable DCO on Win32 for VPN Server */
+#cmakedefine ENABLE_DCO_ON_WIN32_VPN_SERVER
+
 /* Enable debugging support (needed for verb>=4) */
 #define ENABLE_DEBUG 1
 
